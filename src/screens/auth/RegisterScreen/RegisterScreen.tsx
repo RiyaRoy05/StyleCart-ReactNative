@@ -30,28 +30,50 @@ const RegisterScreen = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
+  const [nameError, setNameError] = useState('');
+  const [emailError, setEmailError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+  const [confirmPasswordError, setConfirmPasswordError] = useState('');
+
   const handleRegister = async () => {
+    setNameError('');
+    setEmailError('');
+    setPasswordError('');
+    setConfirmPasswordError('');
+
+    let isValid = true;
+
+    if (!fullName.trim()) {
+      setNameError('Full name is required');
+      isValid = false;
+    }
+
+    if (!email.trim()) {
+      setEmailError('Email is required');
+      isValid = false;
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setEmailError('Please enter a valid email');
+      isValid = false;
+    }
+
+    if (!password.trim()) {
+      setPasswordError('Password is required');
+      isValid = false;
+    }
+
+    if (!confirmPassword.trim()) {
+      setConfirmPasswordError('Confirm password is required');
+      isValid = false;
+    }
+
+    if (!isValid) {
+      return;
+    }
+    if (password !== confirmPassword) {
+      setConfirmPasswordError('Passwords do not match');
+      return;
+    }
     try {
-      if (!fullName || !email || !password || !confirmPassword) {
-        Toast.show({
-          type: 'error',
-          text1: 'Error',
-          text2: 'Please fill all fields',
-        });
-
-        return;
-      }
-
-      if (password !== confirmPassword) {
-        Toast.show({
-          type: 'error',
-          text1: 'Error',
-          text2: 'Passwords do not match',
-        });
-
-        return;
-      }
-
       const response = await registerUser(fullName, email, password);
 
       if (response.success) {
@@ -91,7 +113,7 @@ const RegisterScreen = () => {
             value={fullName}
             onChangeText={setFullName}
           />
-
+          {nameError ? <Text style={styles.errorText}>{nameError}</Text> : null}
           <TextInput
             placeholder="Email address"
             placeholderTextColor={COLORS.gray}
@@ -99,7 +121,9 @@ const RegisterScreen = () => {
             value={email}
             onChangeText={setEmail}
           />
-
+          {emailError ? (
+            <Text style={styles.errorText}>{emailError}</Text>
+          ) : null}
           <TextInput
             placeholder="Password"
             placeholderTextColor={COLORS.gray}
@@ -108,7 +132,9 @@ const RegisterScreen = () => {
             value={password}
             onChangeText={setPassword}
           />
-
+          {passwordError ? (
+            <Text style={styles.errorText}>{passwordError}</Text>
+          ) : null}
           <TextInput
             placeholder="Confirm password"
             placeholderTextColor={COLORS.gray}
@@ -118,6 +144,9 @@ const RegisterScreen = () => {
             onChangeText={setConfirmPassword}
           />
         </View>
+        {confirmPasswordError ? (
+          <Text style={styles.errorText}>{confirmPasswordError}</Text>
+        ) : null}
 
         <TouchableOpacity style={styles.signupButton} onPress={handleRegister}>
           <Text style={styles.signupText}>SIGN UP</Text>
@@ -263,5 +292,10 @@ const styles = StyleSheet.create({
     color: COLORS.black,
     fontSize: wp('3.8%'),
     fontFamily: FONTS.regular,
+  },
+  errorText: {
+    color: 'red',
+    fontSize: wp('3.2%'),
+    marginTop: hp('0.5%'),
   },
 });
