@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 
 import { SafeAreaView } from 'react-native-safe-area-context';
+import Toast from 'react-native-toast-message';
 
 import {
   widthPercentageToDP as wp,
@@ -53,10 +54,28 @@ const ProductDetailsScreen = () => {
 
           if (relatedResponse.success) {
             setRelatedProducts(relatedResponse.data);
+          } else {
+            Toast.show({
+              type: 'error',
+              text1: 'Error',
+              text2:
+                relatedResponse.message || 'Failed to load related products',
+            });
           }
+        } else {
+          Toast.show({
+            type: 'error',
+            text1: 'Error',
+            text2: response.message || 'Failed to load product details',
+          });
         }
-      } catch (error) {
-        console.log(error);
+      } catch (error: any) {
+        Toast.show({
+          type: 'error',
+          text1: 'Error',
+          text2:
+            error?.response?.data?.message || 'Failed to load product details',
+        });
       }
     };
 
@@ -387,7 +406,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
 
     marginTop: hp('2%'),
-   
+
     paddingHorizontal: wp('8%'),
   },
 

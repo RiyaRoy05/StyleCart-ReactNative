@@ -10,6 +10,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { getProducts } from '../../../api/productApi';
+import Toast from 'react-native-toast-message';
 
 import {
   widthPercentageToDP as wp,
@@ -37,13 +38,21 @@ const ProductListScreen = () => {
       try {
         const response = await getProducts(categoryId);
 
-        console.log(response);
-
         if (response.success) {
           setProducts(response.data);
+        } else {
+          Toast.show({
+            type: 'error',
+            text1: 'Error',
+            text2: response.message || 'Failed to load products',
+          });
         }
-      } catch (error) {
-        console.log(error);
+      } catch (error: any) {
+        Toast.show({
+          type: 'error',
+          text1: 'Error',
+          text2: error?.response?.data?.message || 'Failed to load products',
+        });
       }
     };
 
