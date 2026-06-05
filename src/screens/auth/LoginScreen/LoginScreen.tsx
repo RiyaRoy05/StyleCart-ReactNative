@@ -26,18 +26,30 @@ const LoginScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const [emailError, setEmailError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+
   const handleLogin = async () => {
+    setEmailError('');
+    setPasswordError('');
+
+    let isValid = true;
+
+    if (!email.trim()) {
+      setEmailError('Email is required');
+      isValid = false;
+    }
+
+    if (!password.trim()) {
+      setPasswordError('Password is required');
+      isValid = false;
+    }
+
+    if (!isValid) {
+      return;
+    }
+
     try {
-      if (!email || !password) {
-        Toast.show({
-          type: 'error',
-          text1: 'Error',
-          text2: 'Please fill all fields',
-        });
-
-        return;
-      }
-
       const response = await loginUser(email, password);
 
       if (response.success) {
@@ -55,6 +67,12 @@ const LoginScreen = () => {
             routes: [{ name: 'Category' }],
           });
         }, 1000);
+      } else {
+        Toast.show({
+          type: 'error',
+          text1: 'Login Failed',
+          text2: response.message,
+        });
       }
     } catch (error: any) {
       Toast.show({
@@ -78,6 +96,9 @@ const LoginScreen = () => {
             value={email}
             onChangeText={setEmail}
           />
+          {emailError ? (
+            <Text style={styles.errorText}>{emailError}</Text>
+          ) : null}
           <TextInput
             placeholder="Password"
             placeholderTextColor={COLORS.gray}
@@ -86,6 +107,9 @@ const LoginScreen = () => {
             value={password}
             onChangeText={setPassword}
           />
+          {passwordError ? (
+            <Text style={styles.errorText}>{passwordError}</Text>
+          ) : null}
         </View>
         <TouchableOpacity>
           <Text style={styles.forgotText}>Forgot Password?</Text>
@@ -226,5 +250,10 @@ const styles = StyleSheet.create({
     fontFamily: FONTS.regular,
     borderBottomWidth: 1,
     borderBottomColor: COLORS.black,
+  },
+  errorText: {
+    color: 'red',
+    fontSize: wp('3.2%'),
+    marginTop: hp('0.5%'),
   },
 });

@@ -35,7 +35,7 @@ const ProductCard = ({
   return (
     <TouchableOpacity style={styles.card} onPress={onPress}>
       <View style={styles.imageContainer}>
-        <Image source={image} style={styles.productImage} />
+        {image && <Image source={image} style={styles.productImage} />}
 
         <TouchableOpacity
           style={styles.heartContainer}
@@ -57,7 +57,9 @@ const ProductCard = ({
       <View style={styles.priceRow}>
         <Text style={styles.price}>{price}</Text>
 
-        <Text style={styles.oldPrice}>{oldPrice}</Text>
+        <Text style={styles.oldPrice}>
+          {oldPrice ? <Text style={styles.oldPrice}>{oldPrice}</Text> : null}
+        </Text>
       </View>
 
       <View style={styles.ratingRow}>
