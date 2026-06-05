@@ -8,6 +8,7 @@ import {
 
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native';
+import Toast from 'react-native-toast-message';
 
 import {
   widthPercentageToDP as wp,
@@ -43,9 +44,19 @@ const CategoryScreen = () => {
       if (response.success) {
         setCategories(response.data);
         setFilteredCategories(response.data);
+      } else {
+        Toast.show({
+          type: 'error',
+          text1: 'Error',
+          text2: response.message,
+        });
       }
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: error?.response?.data?.message || 'Failed to load categories',
+      });
     }
   };
 

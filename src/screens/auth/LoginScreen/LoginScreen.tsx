@@ -38,6 +38,9 @@ const LoginScreen = () => {
     if (!email.trim()) {
       setEmailError('Email is required');
       isValid = false;
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setEmailError('Please enter a valid email');
+      isValid = false;
     }
 
     if (!password.trim()) {
