@@ -15,7 +15,6 @@ type CategoryCardProps = {
 };
 
 const CategoryCard = ({ name, image, onPress }: CategoryCardProps) => {
-  console.log('TITLE =>', name);
   return (
     <TouchableOpacity style={styles.categoryCard} onPress={onPress}>
       <Text style={styles.categoryText}>{name}</Text>

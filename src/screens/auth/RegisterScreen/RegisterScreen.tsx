@@ -62,7 +62,10 @@ const RegisterScreen = () => {
         });
 
         setTimeout(() => {
-          navigation.navigate('Login');
+          navigation.reset({
+            index: 0,
+            routes: [{ name: 'Login' }],
+          });
         }, 1000);
       }
     } catch (error: any) {
@@ -150,7 +153,12 @@ const RegisterScreen = () => {
 
           <TouchableOpacity
             style={styles.loginContainer}
-            onPress={() => navigation.navigate('Login')}
+            onPress={() =>
+              navigation.reset({
+                index: 0,
+                routes: [{ name: 'Login' }],
+              })
+            }
           >
             <Text style={styles.loginLink}>Log In</Text>
           </TouchableOpacity>

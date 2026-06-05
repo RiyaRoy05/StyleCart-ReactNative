@@ -50,7 +50,10 @@ const LoginScreen = () => {
         });
 
         setTimeout(() => {
-          navigation.navigate('Category');
+          navigation.reset({
+            index: 0,
+            routes: [{ name: 'Category' }],
+          });
         }, 1000);
       }
     } catch (error: any) {
@@ -115,9 +118,7 @@ const LoginScreen = () => {
         </View>
         <View style={styles.bottomContainer}>
           <Text style={styles.bottomText}>Don't have an account?</Text>
-          <TouchableOpacity
-            onPress={() => navigation.navigate('Register' as never)}
-          >
+          <TouchableOpacity onPress={() => navigation.navigate('Register')}>
             <Text style={styles.signUpText}>Sign Up</Text>
           </TouchableOpacity>
         </View>
